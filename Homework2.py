@@ -1,9 +1,15 @@
-"""A function that compare a number guessed by the user with the actual hidden a number between 0 to 100. Hints are
-provided. """
+"""A game that compare a number guessed by the user with the random number between 0 to 100, picked by CPU. Hints are
+provided After three fails. """
 import random
 
 
 def hint(t, ans):
+    """
+    Function that is triggered after three fails. Compares if the guess is above or bellow te right answer
+    :param t: the guess by the user
+    :param ans: the correct answer
+    :return: a print statement with a hint to the user.
+    """
     if t > ans:
         print(f"\n<<<<<<<<<<<<<< HINT >>>>>>>>>>>>>> \nA resposta certa é menor do que {t}")
     else:
@@ -11,6 +17,12 @@ def hint(t, ans):
 
 
 def test_guess(ans, count):
+    """
+    Function that compare the number provided by the user with the one randomly assinged by the program
+    :param ans: the correct answer
+    :param count: the current counter of times that player is trying
+    :return: True when the user fails the guessing and False when the player correctly guess the answer
+    """
     t = int(input("\nDigite um número de 0 à 100\n:"))
     if t == ans:
         print(
@@ -28,7 +40,10 @@ def test_guess(ans, count):
         return True
 
 
-def user_int():
+def guessing_game():
+    """The interfaface of the program. Here the user will choose to play or to close the game. Invalid options are
+    tested. """
+
     print("Olá! Bem vindo ao jogo da adivinhação!\n\nEu escolho um número e você tenta adivinhar")
     r = input("Vamos começar? \n\nPressione: (1) SIM, ou (0)NÃO\n:")
     if r == '1':
@@ -40,7 +55,10 @@ def user_int():
             infinite = test_guess(ans, count)
     elif r == '0':
         return False
+    elif r != '0' or r != '1':
+        print('\n\nHmm, acho que você entrou uma opção inválida! Vamos começar de novo?\n')
+        guessing_game()
 
 
 if __name__ == '__main__':
-    user_int()
+    guessing_game()
