@@ -50,24 +50,59 @@ por 1.000,54.
 14. Escreva um programa que verifica se todas as letras do alfabeto constam no mínimo uma
 vez do parágrafo fornecido pelo usuário.
 """
-import math
 
 
-def star_sky(n):
-    for star in range(1, n):
+def star_sky():
+    for star in range(1, 4):
         print(star * '* ')
-    for star in range(1, n + 1):
-        print((n - star + 1) * '* ')
+    for star in range(1, 4 + 1):
+        print((4 - star + 1) * '* ')
+
+
+def print_n(n):
+    for i in range(1, n + 1):
+        print('* ', end='')
+
+
+def counting_stars(y):
+    x = 0
+    z = 2
+    for line in range(1, 8):
+        if 0 < line < 5:
+            if (y - x) > line:
+                print(line * '* ')
+                x += line
+            else:
+                print_n(y - x)
+                break
+        if line >= 5:
+            if (y - x) >= (line - z):
+                print((line - z) * '* ')
+                x += (line - z)
+                z += 2
+            else:
+                print_n(y - x)
+                break
 
 
 def star_sky2():
-    n = int(input('Escolha o número máximo de estrelas que deseja visualizar no padrão.\nLembre-se que este é um '
-                  'padrão geométrico, escolha entre números\ncuja raiz é inteira:\n'))
-    n = int(math.sqrt(n))
-    for star in range(1, n):
-        print(star * '* ')
-    for star in range(1, n + 1):
-        print((n - star + 1) * '* ')
+    select = input(
+        "Digite:\n[0]Deseja alterar o tamanho do padrão?\n[1]Deseja escolher quantas estrelas são impressas?")
+    if select == '1':
+        y = int(input("Do total de 16 estrelas, quantas deseja imprimir ao total?"))
+        if y > 16:
+            print('Não posso repetir o padrão com mais de 16 estrelas')
+        else:
+            counting_stars(y)
+    elif select == '0':
+        n = int(input('Quantas estrelas deseja imprimir na linha central do padrão?'))
+        n = int(n)
+        for star in range(1, n):
+            print(star * '* ')
+        for star in range(1, n + 1):
+            print((n - star + 1) * '* ')
+    else:
+        star_sky2()
 
 
 def pumbla():
@@ -230,8 +265,8 @@ def all_alpha(s):
 
 
 if __name__ == '__main__':
-    # star_sky(4)  # 1
-    # star_sky2()  # 2
+    # star_sky()  # 1
+    star_sky2()  # 2
     # pumbla()  # 3
     # mom_bday()  # 4
     # is_consonant()  # 5
