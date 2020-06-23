@@ -266,7 +266,7 @@ def all_alpha(s):
 
 if __name__ == '__main__':
     # star_sky()  # 1
-    star_sky2()  # 2
+    # star_sky2()  # 2
     # pumbla()  # 3
     # mom_bday()  # 4
     # is_consonant()  # 5
