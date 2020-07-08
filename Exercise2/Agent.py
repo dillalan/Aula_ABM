@@ -21,6 +21,7 @@ class Agent:
         self.age = random.randint(15, 95)
         self.acc = Conta(0)
         self.exp = 0
+        self.stay = None
 
     def __repr__(self):
         return f'{self.name} |Net Fund: {self.acc.net}| \n |Experience: {self.exp}|'

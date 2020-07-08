@@ -37,8 +37,6 @@ class Loja:
     def product(self):
         return self.experience
 
-    # TODO Exit clients from store(a.k.a. += var capacity)
-
     # TODO: altera a experiencia de acordo com a capacidade
 
     def __repr__(self):
