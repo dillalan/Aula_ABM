@@ -20,10 +20,10 @@ class Loja:
     def __init__(self, reg):
         self.id = reg
         self.name = pick_fantasy()
+        self.capacity = random.randint(10, 30)
         self.acc = Conta(0)
         self.cost_product = round(random.random() * 10, 2)
         self.experience = random.randint(0, 10)
-        self.capacity = random.randint(5, 200)
 
     def sell_price(self):
         return self.cost_product
@@ -33,6 +33,9 @@ class Loja:
             if self.capacity == 0:
                 return False
             return True
+
+    def update_experience(self):
+        self.experience = round(self.experience * ((self.capacity - 1) / self.capacity), 1)
 
     def product(self):
         return self.experience

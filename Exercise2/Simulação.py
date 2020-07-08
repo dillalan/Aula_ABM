@@ -29,7 +29,7 @@ class Simulacao:
         Generate costumers. Type Agent
         :return: (list) of costumers
         """
-        for id in range(10):
+        for id in range(100):
             self.customers.append(Agent(id))
 
     def mean_exp(self):
@@ -74,6 +74,12 @@ class Simulacao:
                 selected_store.acc.deposit(client.acc.draw_cash(selected_store.cost_product))
                 # Buying some good from the store means that the store receive a deposit equivalent to the
                 # value of the store product cost. This sum is removed from the costumer account
+                if selected_store.capacity > 1:
+                    selected_store.update_experience()
+                    # Update the experience based on store capacity
+                else:
+                    pass
+                    # Avoid error of divide by zero in update_experience formulae
                 client.exp += selected_store.product()
                 # To buy a good it's to get an experience. This experience value its placed within costumer
                 # attribute Agent.exp
