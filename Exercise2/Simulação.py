@@ -50,19 +50,20 @@ class Simulacao:
         for client in self.customers:
             client.acc.deposit(random.randint(10, 20))
 
-    def to_other_place(self, except_this, client, this_list):
-        # Self.stores is locally filled with the current list of stores
-        self.stores = this_list
-        # Then remove the store already visited
-        self.stores.remove(except_this)
-        # New place to go is defined
-        all_the_rest = random.choice(self.stores)
-        # Send back to self.shopping with new store and new list of possible stores
-        self.shopping(all_the_rest, client, self.stores)
+    def to_other_place(self, except_this, client):
+        # Add a store in a list of no going back
+        client.no_go.append(except_this)
+        now_this = random.choice(self.stores)
+        # Chose another store to visit, but if is the same already visited loop random.choice until its not the case
+        while now_this in client.no_go:
+            now_this = random.choice(self.stores)
+            # But if all available places sucks, go home
+            if len(client.no_go) == len(self.stores):
+                pass
+        # Go shop in this other store
+        self.shopping(now_this, client)
 
-    def shopping(self, selected_store, client, current_list):
-        # Keep track of the actual list of stores to go
-        possible_choices = current_list
+    def shopping(self, selected_store, client):
         # Check if its possible to enter the selected store
         its_a_go = selected_store.capacity_check()
         if its_a_go:
@@ -82,7 +83,7 @@ class Simulacao:
                     # If the costumer choose to leave, it clears space to a new costumer
                     selected_store.capacity += 1
                     # Go choose other place to go, except that one already visited
-                    self.to_other_place(selected_store, client, possible_choices)
+                    self.to_other_place(selected_store, client)
                 else:
                     pass
 
@@ -91,7 +92,8 @@ class Simulacao:
         for client in self.customers:
             # Select a random store
             selected_store = random.choice(self.stores)
-            self.shopping(selected_store, client, self.stores)
+            # Go shop in this store
+            self.shopping(selected_store, client)
         return self.mean_exp()
 
 
