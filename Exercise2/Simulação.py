@@ -50,13 +50,19 @@ class Simulacao:
         for client in self.customers:
             client.acc.deposit(random.randint(10, 20))
 
-    def to_other_place(self, except_this, client):
+    def to_other_place(self, except_this, client, this_list):
+        # Self.stores is locally filled with the current list of stores
+        self.stores = this_list
+        # Then remove the store already visited
         self.stores.remove(except_this)
+        # New place to go is defined
         all_the_rest = random.choice(self.stores)
-        print(self.stores)
-        self.shopping(all_the_rest, client)
+        # Send back to self.shopping with new store and new list of possible stores
+        self.shopping(all_the_rest, client, self.stores)
 
-    def shopping(self, selected_store, client):
+    def shopping(self, selected_store, client, current_list):
+        # Keep track of the actual list of stores to go
+        possible_choices = current_list
         # Check if its possible to enter the selected store
         its_a_go = selected_store.capacity_check()
         if its_a_go:
@@ -75,8 +81,8 @@ class Simulacao:
                 if not stay:
                     # If the costumer choose to leave, it clears space to a new costumer
                     selected_store.capacity += 1
-                    # função pra escolher outra loja menos essa e recurse essa função
-                    self.to_other_place(selected_store, client)
+                    # Go choose other place to go, except that one already visited
+                    self.to_other_place(selected_store, client, possible_choices)
                 else:
                     pass
 
@@ -85,7 +91,7 @@ class Simulacao:
         for client in self.customers:
             # Select a random store
             selected_store = random.choice(self.stores)
-            self.shopping(selected_store, client)
+            self.shopping(selected_store, client, self.stores)
         return self.mean_exp()
 
 
