@@ -3,6 +3,10 @@ import random
 
 
 def pick_name():
+    """
+    A function to assign a name to the Agent
+    :return: (string) a name from name_list.txt
+    """
     my_name = open('name_list.txt', encoding='utf-8')
     name = str()
     for name in range(random.randint(1, 200)):
@@ -27,6 +31,11 @@ class Agent:
         return f'{self.name} |Net Fund: {self.acc.net}| \n |Experience: {self.exp}|'
 
     def check_funds(self, loja):
+        """
+        Check if Agent have sufficient net funds to buy a product in a given store
+        :param loja:
+        :return: (Boolean)
+        """
         if self.acc.net >= loja.cost_product:  # como generalizar a loja???
             return True
         else:
@@ -34,5 +43,4 @@ class Agent:
 
 
 if __name__ == '__main__':
-    test = Agent(0)
-    print(test)
+    pass

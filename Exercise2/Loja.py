@@ -4,6 +4,10 @@ from Exercise2.Conta import Conta
 
 
 def pick_fantasy():
+    """
+    A function to assign a name to Store entities. The
+    :return: (string) A name from fantasy_name.txt
+    """
     my_name = open('fantasy_name.txt', encoding='utf-8')
     name = str()
     for name in range(random.randint(1, 54)):
@@ -26,21 +30,36 @@ class Loja:
         self.experience = random.randint(0, 10)
 
     def sell_price(self):
+        """
+        A function that return price cost of the Store product
+        :return: (float)
+        """
         return self.cost_product
 
     def capacity_check(self):
+        """
+        Check if there is a clear spot for a new costumer
+        :return: (Boolean)
+        """
         if self.capacity >= 0:
             if self.capacity == 0:
                 return False
             return True
 
     def update_experience(self):
+        """
+        A function that uptade the returned store experience according to the store capacity to receive clients.
+        A more crowed store returns less experience that it initial preset.
+        :return:
+        """
         self.experience = round(self.experience * ((self.capacity - 1) / self.capacity), 1)
 
     def product(self):
+        """
+        A function that simulates a purchase of product, returning experience to the caller.
+        :return: (float)
+        """
         return self.experience
-
-    # TODO: altera a experiencia de acordo com a capacidade
 
     def __repr__(self):
         return f'ID: {self.id} @ {self.name}'

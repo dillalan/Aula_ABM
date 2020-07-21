@@ -1,6 +1,14 @@
 import random
+import csv
 from Exercise2.Loja import Loja
 from Exercise2.Agent import Agent
+
+
+def to_data(data):
+    with open('arquivo1.csv', 'w', newline='') as csvfile:
+        handler = csv.writer(csvfile, quoting=csv.QUOTE_NONE)
+        handler.writerow(data)
+        csvfile.close()
 
 
 class Simulacao:
@@ -11,36 +19,58 @@ class Simulacao:
         self.grow_customers()
         self.initial_cash()
 
-    def txt_data(self):
-        # TODO: Create a .txt with the run results
-        # with open('arquivo1.csv', 'w') as handler as f:
-        pass
-
-    def grow_stores(self):
+    def grow_stores(self, n_stores=30):
         """
         Generate stores. Type Loja
         :return: (list) of stores
         """
-        for id in range(10):
+        for id in range(n_stores):
             self.stores.append(Loja(id))
 
-    def grow_customers(self):
+    def grow_customers(self, n_agents=100):
         """
         Generate costumers. Type Agent
         :return: (list) of costumers
         """
-        for id in range(100):
+        for id in range(n_agents):
             self.customers.append(Agent(id))
 
     def mean_exp(self):
         """
-        Takes the experience of all customers in given step
+        Takes the mean experience of all customers in given run
         :return: (float) the mean experience
         """
         exp_sum = 0
         for client in self.customers:
             exp_sum += client.exp
         return exp_sum / len(self.customers)
+
+    def mean_acc(self, customer=True):
+        """
+        Takes the mean net fund of all customers in given run.
+        Return customer mean net fund by default. customer = False return stores mean net fund by default
+        :return: (float) the mean net fund
+        """
+        if customer:
+            acc_sum = 0
+            for client in self.customers:
+                acc_sum += client.acc.net
+            return acc_sum / len(self.customers)
+        else:
+            acc_sum = 0
+            for store in self.stores:
+                acc_sum += store.acc.net
+            return acc_sum / len(self.stores)
+
+    def mean_price(self):
+        """
+        Takes the mean price of all stores in a given run
+        :return: (float) the mean price
+        """
+        price_sum = 0
+        for store in self.stores:
+            price_sum += store.cost_product
+        return price_sum / len(self.stores)
 
     def initial_cash(self):
         """
@@ -51,6 +81,13 @@ class Simulacao:
             client.acc.deposit(random.randint(10, 20))
 
     def to_other_place(self, except_this, client):
+        """
+        A function that eliminates a store, from his possible choices, where the agent was
+        unsatisfied with the gained experience. Then calls the client to go shopping again.
+        :param except_this: the bad store
+        :param client: the client
+        :return:
+        """
         # Add a store in a list of no going back
         client.no_go.append(except_this)
         now_this = random.choice(self.stores)
@@ -64,6 +101,13 @@ class Simulacao:
         self.shopping(now_this, client)
 
     def shopping(self, selected_store, client):
+        """
+        Emulates the agents wandering trough stores until satisfied with the experience
+        given by one of the possible choices
+        :param selected_store:  store to visit
+        :param client: a given client
+        :return:
+        """
         # Check if its possible to enter the selected store
         its_a_go = selected_store.capacity_check()
         if its_a_go:
@@ -79,7 +123,7 @@ class Simulacao:
                     # Update the experience based on store capacity
                 else:
                     pass
-                    # Avoid error of divide by zero in update_experience formulae
+                    # Avoid error of divide by zero in update_experience formula
                 client.exp += selected_store.product()
                 # To buy a good it's to get an experience. This experience value its placed within costumer
                 # attribute Agent.exp
@@ -100,10 +144,10 @@ class Simulacao:
             selected_store = random.choice(self.stores)
             # Go shop in this store
             self.shopping(selected_store, client)
-        return self.mean_exp()
+        all_means = self.mean_exp(), self.mean_acc(), self.mean_acc(False), self.mean_price()
+        to_data(all_means)
+        return all_means
 
 
 if __name__ == '__main__':
-    minha_sim = Simulacao()
-    media = minha_sim.run_model()
-    print(media)
+    pass
